@@ -28,6 +28,7 @@ export default async function Index() {
   };
 
   const isSupabaseConnected = canInitSupabaseClient();
+  console.log("isSupabaseConnected", isSupabaseConnected);
 
   return (
     <main className="flex min-h-svh flex-col items-center gap-20 bg-gradient-to-b from-white to-zinc-200 px-20 pt-40 dark:from-zinc-800 dark:to-zinc-900">
