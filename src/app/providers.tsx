@@ -11,8 +11,8 @@ export function Providers({
   ...props
 }: Readonly<ThemeProviderProps>) {
   return (
-    <Provider>
-      <NextThemesProvider {...props}>{children}</NextThemesProvider>
-    </Provider>
+    // <NextThemesProvider {...props}>
+      <Provider>{children}</Provider>
+    // </NextThemesProvider>
   );
 }
