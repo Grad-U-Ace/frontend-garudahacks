@@ -2,6 +2,8 @@ import "./globals.css";
 
 import { Darker_Grotesque } from "next/font/google";
 
+import BgShaderGradient from "./components/BgShaderGradient";
+import Sidebar from "./components/Sidebar";
 import { Providers } from "./providers";
 
 const defaultUrl = process.env.VERCEL_URL
@@ -29,9 +31,14 @@ export default function RootLayout({
         enableSystem
         disableTransitionOnChange
       >
-        <body className="flex flex-col">
-          {/* Navbar */}
-          {children}
+        <body className="flex h-svh">
+          <BgShaderGradient />
+          <Sidebar />
+          <main className="flex h-svh grow flex-col items-center justify-center gap-5 p-5">
+            <div className="flex size-full items-center justify-center rounded-xl bg-white/5 backdrop-blur-[120px] shadow-inner-sm shadow-white/20">
+              {children}
+            </div>
+          </main>
           {/* Footer */}
         </body>
       </Providers>
