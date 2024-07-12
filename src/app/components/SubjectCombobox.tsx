@@ -1,8 +1,9 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 
 import { Check, ChevronsUpDown } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,33 +20,15 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-
-const subjects = [
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
-];
+import { AddSubjectDialog } from "./AddSubjectDialog";
 
 export function SubjectCombobox() {
-  const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState("");
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState("");
+  const [subjects, setSubjects] = useState<
+    Array<{ value: string; label: string }>
+  >([]);
+  const router = useRouter();
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -53,7 +36,7 @@ export function SubjectCombobox() {
         <Button
           role="combobox"
           aria-expanded={open}
-          className="justify-between bg-white/10 text-lg backdrop-blur-3xl transition-colors hover:bg-white/20"
+          className="justify-between bg-white/10 text-lg capitalize backdrop-blur-3xl transition-colors hover:bg-white/20"
         >
           {value
             ? subjects.find((subject) => subject.value === value)?.label
@@ -71,10 +54,11 @@ export function SubjectCombobox() {
                 <CommandItem
                   key={subject.value}
                   value={subject.value}
-                  className="transition-colors aria-selected:bg-white/20"
+                  className="rounded capitalize transition-colors aria-selected:bg-white/20"
                   onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue);
+                    setValue(currentValue);
                     setOpen(false);
+                    router.push(`/${currentValue}`);
                   }}
                 >
                   <Check
@@ -88,6 +72,9 @@ export function SubjectCombobox() {
               ))}
             </CommandList>
           </CommandGroup>
+          <div className="px-1 pb-1">
+            <AddSubjectDialog setSubjects={setSubjects} />
+          </div>
         </Command>
       </PopoverContent>
     </Popover>

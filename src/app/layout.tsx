@@ -4,6 +4,7 @@ import { Darker_Grotesque } from "next/font/google";
 
 import BgShaderGradient from "./components/BgShaderGradient";
 import Sidebar from "./components/Sidebar";
+import TopTabs from "./components/TopTabs";
 import { Providers } from "./providers";
 
 const defaultUrl = process.env.VERCEL_URL
@@ -36,6 +37,7 @@ export default function RootLayout({
           <Sidebar />
           <main className="flex h-svh grow flex-col items-center justify-center gap-5 p-5">
             <div className="size-full rounded-xl bg-white/5 shadow-inner-sm shadow-white/20 backdrop-blur-[120px]">
+              <TopTabs />
               {children}
             </div>
           </main>

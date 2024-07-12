@@ -25,6 +25,17 @@
     width: var(--radix-popover-trigger-width);
     max-height: var(--radix-popover-content-available-height);
   }
+
+  .fade-edges {
+    --mask: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 1) 5%,
+        rgba(0, 0, 0, 1) 95%,
+        rgba(0, 0, 0, 0) 100%
+      )
+      50% 100% / 100% 100% repeat-y;
+  }
 }
 
 * {
