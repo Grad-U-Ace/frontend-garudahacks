@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react";
 
 import { addDays, format } from "date-fns";
 import { Trash } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -44,10 +45,14 @@ type PlannerProps = {
 export default function Planner({ data }: Readonly<PlannerProps>) {
   const [subjects, setSubjects] = useState<Subject[]>(data);
   const [selectedSubject, setSelectedSubject] = useState<Subject | null>(null);
+  const pathname = usePathname();
+  const slug = Number(pathname.split("/").pop());
 
   useEffect(() => {
     if (subjects.length > 0) {
-      setSelectedSubject(subjects[0]);
+      setSelectedSubject(
+        subjects.find((subject) => subject.id === slug) ?? null,
+      );
     }
   }, [subjects]);
 
@@ -65,19 +70,12 @@ export default function Planner({ data }: Readonly<PlannerProps>) {
   async function onSubmit(formData: z.infer<typeof FormSchema>) {
     if (!selectedSubject) return;
 
-    const newTopicData = {
-      name: formData.topic,
-      mapel: selectedSubject.id,
-      start_date: format(formData.dateRange.from, "yyyy-MM-dd"),
-      end_date: format(formData.dateRange.to, "yyyy-MM-dd"),
-    };
-
     try {
       const newTopic = await createTopic(
-        newTopicData.name,
-        newTopicData.mapel,
-        newTopicData.start_date,
-        newTopicData.end_date,
+        formData.topic,
+        selectedSubject.id,
+        format(formData.dateRange.from, "yyyy-MM-dd"),
+        format(formData.dateRange.to, "yyyy-MM-dd"),
       );
 
       setSubjects((prevSubjects) =>
@@ -88,9 +86,16 @@ export default function Planner({ data }: Readonly<PlannerProps>) {
         ),
       );
 
-      form.reset();
+      form.reset({
+        topic: "",
+        dateRange: {
+          from: new Date(),
+          to: addDays(new Date(), 7),
+        },
+      });
     } catch (error) {
       console.error("Failed to add topic:", error);
+      // You might want to show an error message to the user here
     }
   }
 

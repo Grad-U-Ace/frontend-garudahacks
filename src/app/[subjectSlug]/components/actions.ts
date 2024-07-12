@@ -12,7 +12,7 @@ export async function createTopic(
   startDate: string,
   endDate: string,
 ): Promise<Topic> {
-  const res = await fetch(`${BASE_URL}/mapel/${mapelPk}/topics`, {
+  const res = await fetch(`${BASE_URL}/mapel/${mapelPk}/topics/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
