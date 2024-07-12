@@ -12,7 +12,7 @@ export async function createTopic(
   startDate: string,
   endDate: string,
 ): Promise<Topic> {
-  const res = await fetch(`${BASE_URL}/mapel/${mapelPk}/topics`, {
+  const res = await fetch(`${BASE_URL}/mapel/${mapelPk}/topics/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -35,4 +35,24 @@ export async function createTopic(
 
   const newTopic: Topic = await res.json();
   return newTopic;
+}
+
+export async function deleteTopic(
+  mapelPk: number,
+  topicId: number,
+): Promise<void> {
+  const res = await fetch(`${BASE_URL}/mapel/${mapelPk}/topics/${topicId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error(
+      `Failed to delete topic. Server responded with status: ${res.status} ${res.statusText}`,
+    );
+  }
+
+  revalidateTag("subjects");
 }
