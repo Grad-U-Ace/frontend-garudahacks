@@ -2,7 +2,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
-export default function BikinSoalPage() {
+export default function ProblemSetMakerPage() {
   return (
     <div className="flex h-full w-full flex-col items-center justify-center p-4 text-2xl text-white">
       <div className="flex flex-col gap-4 *:first:text-right">
