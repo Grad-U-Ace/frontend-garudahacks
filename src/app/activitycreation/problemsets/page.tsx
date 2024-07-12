@@ -4,23 +4,23 @@ import { Label } from "@/components/ui/label";
 
 export default function BikinSoalPage() {
   return (
-    <div className="text-2xl">
-      <div>
-        <div className="flex gap-9">
-          <p>Topik</p>
-          <Input className="text-black" />
+    <div className="w-full h-full flex flex-col justify-center items-center text-2xl text-white p-4">
+      <div className="flex flex-col gap-4 *:first:text-right">
+        <div className="flex gap-9 w-fit">
+          <p className="w-[50px]">Topic</p>
+          <Input className="text-black w-[240px]" />
         </div>
-        <div className="flex gap-9">
-          <p>Soal</p>
-          <Input className="text-black" />
+        <div className="flex gap-9 w-fit">
+          <p className="w-[50px]">Question</p>
+          <Input className="text-black w-[240px]" />
         </div>
-        <div className="flex gap-9">
-          <p>Level</p>
-          <Input className="text-black" />
+        <div className="flex gap-9 w-fit">
+          <p className="w-[50px]">Level</p>
+          <Input className="text-black w-[240px]" />
         </div>
-        <div>
-          <p>Type</p>
-          <RadioGroup>
+        <div className="flex gap-9 w-fit">
+          <p className="w-[50px]">Type</p>
+          <RadioGroup className="w-[240px]">
             <div className="flex items-center space-x-2">
               <RadioGroupItem
                 value="multiple-choice"
