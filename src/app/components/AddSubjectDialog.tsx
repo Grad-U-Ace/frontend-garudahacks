@@ -1,4 +1,5 @@
 import type { Dispatch, SetStateAction } from "react";
+import type { Subject } from "../types";
 
 import { useState } from "react";
 
@@ -16,23 +17,23 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { createSubject } from "./actions";
 
-type Props = {
-  setSubjects: Dispatch<
-    SetStateAction<Array<{ value: string; label: string }>>
-  >;
+type AddSubjectDialogProps = {
+  setSubjects: React.Dispatch<React.SetStateAction<Subject[]>>;
 };
 
-export function AddSubjectDialog({ setSubjects }: Props) {
+export function AddSubjectDialog({
+  setSubjects,
+}: Readonly<AddSubjectDialogProps>) {
   const [open, setOpen] = useState(false);
   const [subjectName, setSubjectName] = useState("");
 
-  const handleSubmit = (e: { preventDefault: () => void }) => {
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     if (subjectName.trim()) {
-      const value = subjectName.toLowerCase().replace(/\s+/g, "-");
-      console.log(value);
-      setSubjects((subjects) => [...subjects, { value, label: value }]);
+      const newSubject = await createSubject(subjectName.trim());
+      setSubjects((subjects) => [...subjects, newSubject]);
       setOpen(false);
     }
   };

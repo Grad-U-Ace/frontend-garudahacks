@@ -1,5 +1,7 @@
 "use client";
 
+import type { Subject } from "../types";
+
 import { useState } from "react";
 
 import { Check, ChevronsUpDown } from "lucide-react";
@@ -22,12 +24,14 @@ import {
 import { cn } from "@/lib/utils";
 import { AddSubjectDialog } from "./AddSubjectDialog";
 
-export function SubjectCombobox() {
+type SubjectComboboxProps = {
+  data: Subject[];
+};
+
+export function SubjectCombobox({ data }: Readonly<SubjectComboboxProps>) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
-  const [subjects, setSubjects] = useState<
-    Array<{ value: string; label: string }>
-  >([]);
+  const [subjects, setSubjects] = useState<Subject[]>(data);
   const router = useRouter();
 
   return (
@@ -39,7 +43,7 @@ export function SubjectCombobox() {
           className="justify-between bg-white/10 text-lg capitalize backdrop-blur-3xl transition-colors hover:bg-white/20"
         >
           {value
-            ? subjects.find((subject) => subject.value === value)?.label
+            ? subjects.find((subject) => subject.name === value)?.name
             : "Select subjects..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -52,8 +56,8 @@ export function SubjectCombobox() {
             <CommandList>
               {subjects.map((subject) => (
                 <CommandItem
-                  key={subject.value}
-                  value={subject.value}
+                  key={subject.id}
+                  value={subject.name}
                   className="rounded capitalize transition-colors aria-selected:bg-white/20"
                   onSelect={(currentValue) => {
                     setValue(currentValue);
@@ -64,10 +68,10 @@ export function SubjectCombobox() {
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      value === subject.value ? "opacity-100" : "opacity-0",
+                      value === subject.name ? "opacity-100" : "opacity-0",
                     )}
                   />
-                  {subject.label}
+                  {subject.name}
                 </CommandItem>
               ))}
             </CommandList>
