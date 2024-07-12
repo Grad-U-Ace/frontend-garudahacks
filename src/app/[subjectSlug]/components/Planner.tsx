@@ -23,7 +23,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createTopic } from "./actions";
+import { createTopic, deleteTopic as deleteTopicAction } from "./actions";
 import { CalendarRangePicker } from "./CalendarRangePicker";
 
 const FormSchema = z.object({
@@ -45,6 +45,7 @@ type PlannerProps = {
 export default function Planner({ data }: Readonly<PlannerProps>) {
   const [subjects, setSubjects] = useState<Subject[]>(data);
   const [selectedSubject, setSelectedSubject] = useState<Subject | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const pathname = usePathname();
   const slug = Number(pathname.split("/").pop());
 
@@ -99,9 +100,10 @@ export default function Planner({ data }: Readonly<PlannerProps>) {
     }
   }
 
-  const deleteTopic = (topicId: number) => {
+  const deleteTopic = async (topicId: number) => {
     if (!selectedSubject) return;
 
+    // Optimistic update
     setSubjects((prevSubjects) =>
       prevSubjects.map((subject) =>
         subject.id === selectedSubject.id
@@ -114,6 +116,31 @@ export default function Planner({ data }: Readonly<PlannerProps>) {
           : subject,
       ),
     );
+
+    try {
+      await deleteTopicAction(selectedSubject.id, topicId);
+      // If successful, the optimistic update becomes permanent
+    } catch (error) {
+      console.error("Failed to delete topic:", error);
+      // Revert the optimistic update
+      setSubjects((prevSubjects) =>
+        prevSubjects.map((subject) =>
+          subject.id === selectedSubject.id
+            ? {
+                ...subject,
+                topic_set: [
+                  ...subject.topic_set,
+                  selectedSubject.topic_set.find(
+                    (topic) => topic.id === topicId,
+                  )!,
+                ],
+              }
+            : subject,
+        ),
+      );
+      // Show error to user
+      setError("Failed to delete topic. Please try again.");
+    }
   };
 
   return (
