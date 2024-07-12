@@ -13,8 +13,8 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "imonolith Template",
-  description: "All hail the monolith",
+  title: "Guruda",
+  description: "Guru driven AI",
 };
 
 const darkerGrotesque = Darker_Grotesque({ subsets: ["latin"] });
@@ -36,8 +36,8 @@ export default function RootLayout({
           <BgShaderGradient />
           <Sidebar />
           <main className="flex h-svh grow flex-col items-center justify-center gap-5 p-5">
-            <div className="size-full rounded-xl bg-white/5 shadow-inner-sm shadow-white/20 backdrop-blur-[120px]">
-              <TopTabs />
+            <div className="flex size-full flex-col rounded-xl bg-white/5 shadow-inner-sm shadow-white/20 backdrop-blur-[120px]">
+              {/* <TopTabs /> */}
               {children}
             </div>
           </main>
