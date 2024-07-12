@@ -35,7 +35,7 @@ export default function RootLayout({
           <BgShaderGradient />
           <Sidebar />
           <main className="flex h-svh grow flex-col items-center justify-center gap-5 p-5">
-            <div className="flex size-full items-center justify-center rounded-xl bg-white/5 backdrop-blur-[120px] shadow-inner-sm shadow-white/20">
+            <div className="size-full rounded-xl bg-white/5 shadow-inner-sm shadow-white/20 backdrop-blur-[120px]">
               {children}
             </div>
           </main>
