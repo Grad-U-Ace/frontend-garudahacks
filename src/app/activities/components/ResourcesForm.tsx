@@ -2,7 +2,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
-export default function ResourcesMakerPage() {
+export default function ResourcesForm() {
   return (
     <div className="flex h-full w-full flex-col gap-4 items-center justify-center p-4 text-2xl text-white">
       <div className="flex w-fit gap-9">
