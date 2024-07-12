@@ -60,9 +60,10 @@ export function SubjectCombobox({ data }: Readonly<SubjectComboboxProps>) {
                   value={subject.name}
                   className="rounded capitalize transition-colors aria-selected:bg-white/20"
                   onSelect={(currentValue) => {
+                    const id = subjects.find((subject) => subject.name === currentValue)?.id;
                     setValue(currentValue);
                     setOpen(false);
-                    router.push(`/${currentValue}`);
+                    router.push(`/${id}`);
                   }}
                 >
                   <Check

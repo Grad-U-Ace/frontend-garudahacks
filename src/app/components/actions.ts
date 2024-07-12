@@ -5,7 +5,10 @@ import { Subject } from "../types";
 const BASE_URL = "https://guruda-api-kv422ek6cq-et.a.run.app";
 
 export async function fetchSubjects(): Promise<Subject[]> {
-  const res = await fetch(`${BASE_URL}/mapel/`);
+  const res = await fetch(`${BASE_URL}/mapel/`, {
+    cache: "no-store",
+    next: { revalidate: 60, tags: ["subjects"] },
+  });
 
   if (!res.ok) {
     throw new Error(
@@ -14,7 +17,6 @@ export async function fetchSubjects(): Promise<Subject[]> {
   }
 
   const data: Subject[] = await res.json();
-  console.log(data);
   return data;
 }
 

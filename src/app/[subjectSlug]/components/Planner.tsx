@@ -1,6 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import type { Subject, Topic } from "@/app/types";
+import type { Dispatch, SetStateAction } from "react";
+
+import React, { useEffect, useState } from "react";
 
 import { addDays, format } from "date-fns";
 import { Trash } from "lucide-react";
@@ -19,13 +22,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { createTopic } from "./actions";
 import { CalendarRangePicker } from "./CalendarRangePicker";
-
-const initialPlans = [
-  { id: 1, topic: "Project Kickoff", dateRange: "Jul 15, 2023 - Jul 20, 2023" },
-  { id: 2, topic: "Design Review", dateRange: "Aug 1, 2023" },
-  // More plans...
-];
 
 const FormSchema = z.object({
   topic: z.string().min(1, "Topic is required."),
@@ -39,8 +37,19 @@ const FormSchema = z.object({
   }),
 });
 
-export default function Planner() {
-  const [plans, setPlans] = useState(initialPlans);
+type PlannerProps = {
+  data: Subject[];
+};
+
+export default function Planner({ data }: Readonly<PlannerProps>) {
+  const [subjects, setSubjects] = useState<Subject[]>(data);
+  const [selectedSubject, setSelectedSubject] = useState<Subject | null>(null);
+
+  useEffect(() => {
+    if (subjects.length > 0) {
+      setSelectedSubject(subjects[0]);
+    }
+  }, [subjects]);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -53,24 +62,53 @@ export default function Planner() {
     },
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    const newPlan = {
-      id: plans.length + 1,
-      topic: data.topic,
-      dateRange: `${format(data.dateRange.from, "LLL dd, y")} - ${format(data.dateRange.to, "LLL dd, y")}`,
+  async function onSubmit(formData: z.infer<typeof FormSchema>) {
+    if (!selectedSubject) return;
+
+    const newTopicData = {
+      name: formData.topic,
+      mapel: selectedSubject.id,
+      start_date: format(formData.dateRange.from, "yyyy-MM-dd"),
+      end_date: format(formData.dateRange.to, "yyyy-MM-dd"),
     };
-    setPlans([...plans, newPlan]);
-    form.reset({
-      topic: "",
-      dateRange: {
-        from: new Date(),
-        to: addDays(new Date(), 7),
-      },
-    });
+
+    try {
+      const newTopic = await createTopic(
+        newTopicData.name,
+        newTopicData.mapel,
+        newTopicData.start_date,
+        newTopicData.end_date,
+      );
+
+      setSubjects((prevSubjects) =>
+        prevSubjects.map((subject) =>
+          subject.id === selectedSubject.id
+            ? { ...subject, topic_set: [...subject.topic_set, newTopic] }
+            : subject,
+        ),
+      );
+
+      form.reset();
+    } catch (error) {
+      console.error("Failed to add topic:", error);
+    }
   }
 
-  const deletePlan = (id: number) => {
-    setPlans(plans.filter((plan) => plan.id !== id));
+  const deleteTopic = (topicId: number) => {
+    if (!selectedSubject) return;
+
+    setSubjects((prevSubjects) =>
+      prevSubjects.map((subject) =>
+        subject.id === selectedSubject.id
+          ? {
+              ...subject,
+              topic_set: subject.topic_set.filter(
+                (topic) => topic.id !== topicId,
+              ),
+            }
+          : subject,
+      ),
+    );
   };
 
   return (
@@ -78,8 +116,8 @@ export default function Planner() {
       <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
           <div className="overflow-hidden shadow sm:rounded-lg">
-            <table className="shadow-inner-sm-bottom min-w-full divide-y divide-zinc-700/30 bg-zinc-950/20 shadow-white/10">
-              <thead className="">
+            <table className="min-w-full divide-y divide-zinc-700/30 bg-zinc-950/20 shadow-inner-sm-bottom shadow-white/10">
+              <thead>
                 <tr className="flex">
                   <th
                     scope="col"
@@ -91,7 +129,7 @@ export default function Planner() {
                     scope="col"
                     className="w-[45%] px-3 py-3.5 text-left text-sm font-semibold text-white"
                   >
-                    Date / Date Range
+                    Date Range
                   </th>
                   <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
                     <span className="sr-only">Actions</span>
@@ -99,27 +137,27 @@ export default function Planner() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-700/30">
-                {plans.map((plan) => (
-                  <tr key={plan.id} className="group flex">
+                {selectedSubject?.topic_set.map((topic) => (
+                  <tr key={topic.id} className="group flex">
                     <td className="w-[45%] whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-6">
-                      {plan.topic}
+                      {topic.name}
                     </td>
                     <td className="w-[45%] whitespace-nowrap px-3 py-4 text-sm text-zinc-300">
-                      {plan.dateRange}
+                      {`${topic.start_date} - ${topic.end_date}`}
                     </td>
                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                       <button
-                        onClick={() => deletePlan(plan.id)}
+                        onClick={() => deleteTopic(topic.id)}
                         className="text-red-600 opacity-0 transition-opacity duration-300 hover:text-red-900 group-hover:opacity-100"
                       >
                         <Trash className="size-4" aria-hidden="true" />
-                        <span className="sr-only">Delete {plan.topic}</span>
+                        <span className="sr-only">Delete {topic.name}</span>
                       </button>
                     </td>
                   </tr>
                 ))}
                 <tr key="form" className="group h-[53.5px]">
-                  <td className="py-4 pl-4 pr-3">
+                  <td className="py-4 pl-4 pr-3" colSpan={3}>
                     <Form {...form}>
                       <form
                         onSubmit={form.handleSubmit(onSubmit)}
