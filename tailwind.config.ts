@@ -39,6 +39,7 @@ const config = {
       },
       boxShadow: {
         "inner-sm": "inset 0 1px 0 0 rgba(0, 0, 0, 0.05)",
+        "inner-sm-bottom": "inset 0 -1px 0 0 rgba(0, 0, 0, 0.05)",
       },
     },
   },
