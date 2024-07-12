@@ -14,7 +14,7 @@ export default async function Sidebar() {
       </Link>
       <SubjectCombobox data={subjects} />
       <Link href={"/activities"}>
-        <div className="bg-white/10 p-3 rounded-lg transition-colors hover:bg-white/20 backdrop-blur-3xlm">
+        <div className="bg-white/10 p-3 rounded-lg transition-colors hover:bg-white/20 backdrop-blur-3xl">
           Make Activities
         </div>
       </Link>
