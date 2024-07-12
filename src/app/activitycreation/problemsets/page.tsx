@@ -1,31 +1,28 @@
 import { Input } from "@/components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 export default function BikinSoalPage() {
   return (
-    <div className="w-full h-full flex flex-col justify-center items-center text-2xl text-white p-4">
+    <div className="flex h-full w-full flex-col items-center justify-center p-4 text-2xl text-white">
       <div className="flex flex-col gap-4 *:first:text-right">
-        <div className="flex gap-9 w-fit">
-          <p className="w-[50px]">Topic</p>
-          <Input className="text-black w-[240px]" />
+        <div className="flex w-fit gap-9">
+          <p className="w-[64px]">Topic</p>
+          <Input className="w-[240px] text-black" />
         </div>
-        <div className="flex gap-9 w-fit">
-          <p className="w-[50px]">Question</p>
-          <Input className="text-black w-[240px]" />
+        <div className="flex w-fit gap-9">
+          <p className="w-[64px]">Question</p>
+          <Input className="w-[240px] text-black" />
         </div>
-        <div className="flex gap-9 w-fit">
-          <p className="w-[50px]">Level</p>
-          <Input className="text-black w-[240px]" />
+        <div className="flex w-fit gap-9">
+          <p className="w-[64px]">Level</p>
+          <Input className="w-[240px] text-black" />
         </div>
-        <div className="flex gap-9 w-fit">
-          <p className="w-[50px]">Type</p>
+        <div className="flex w-fit gap-9">
+          <p className="w-[64px]">Type</p>
           <RadioGroup className="w-[240px]">
             <div className="flex items-center space-x-2">
-              <RadioGroupItem
-                value="multiple-choice"
-                id="multiple-choice"
-              />
+              <RadioGroupItem value="multiple-choice" id="multiple-choice" />
               <Label htmlFor="multiple-choice">Multiple Choice</Label>
             </div>
             <div className="flex items-center space-x-2">
@@ -37,9 +34,10 @@ export default function BikinSoalPage() {
             </div>
           </RadioGroup>
         </div>
-      </div>
-      <div>
-
+        <div className="flex w-fit gap-9">
+          <Label className="w-[64px] text-2xl" htmlFor="picture">Variants</Label>
+          <Input id="picture" type="file" />
+        </div>
       </div>
     </div>
   );
