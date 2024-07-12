@@ -7,7 +7,7 @@ export default function ActivitiesPage() {
     <div className="h-full w-full flex justify-center items-center">
       <Tabs
         defaultValue="account"
-        className="flex w-[600px] flex-col items-center justify-between"
+        className="flex w-[600px] h-[400px] flex-col items-center justify-between"
       >
         <TabsList>
           <TabsTrigger value="problemset">Problem Sets</TabsTrigger>

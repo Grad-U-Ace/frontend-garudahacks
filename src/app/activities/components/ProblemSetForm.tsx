@@ -1,6 +1,13 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function ProblemSetForm() {
   return (
@@ -16,7 +23,16 @@ export default function ProblemSetForm() {
         </div>
         <div className="flex w-fit gap-9">
           <p className="w-[64px]">Level</p>
-          <Input className="w-[240px] text-black" />
+          <Select>
+            <SelectTrigger className="w-[180px] text-zinc-900">
+              <SelectValue placeholder="Theme" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="light">High Order Thinking Skill</SelectItem>
+              <SelectItem value="dark">Low Order Thinking Skill</SelectItem>
+              {/* <SelectItem value="system">System</SelectItem> */}
+            </SelectContent>
+          </Select>
         </div>
         <div className="flex w-fit gap-9">
           <p className="w-[64px]">Type</p>
@@ -35,7 +51,9 @@ export default function ProblemSetForm() {
           </RadioGroup>
         </div>
         <div className="flex w-fit gap-9">
-          <Label className="w-[64px] text-2xl" htmlFor="picture">Variants</Label>
+          <Label className="w-[64px] text-2xl" htmlFor="picture">
+            Variants
+          </Label>
           <Input id="picture" type="file" />
         </div>
       </div>
