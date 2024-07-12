@@ -83,13 +83,13 @@ export default function Planner() {
                 <tr className="flex">
                   <th
                     scope="col"
-                    className="grow py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6"
+                    className="w-[45%] py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6"
                   >
                     Topic
                   </th>
                   <th
                     scope="col"
-                    className="grow px-3 py-3.5 text-left text-sm font-semibold text-white"
+                    className="w-[45%] px-3 py-3.5 text-left text-sm font-semibold text-white"
                   >
                     Date / Date Range
                   </th>
@@ -101,10 +101,10 @@ export default function Planner() {
               <tbody className="divide-y divide-zinc-700/30">
                 {plans.map((plan) => (
                   <tr key={plan.id} className="group flex">
-                    <td className="grow whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-6">
+                    <td className="w-[45%] whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-6">
                       {plan.topic}
                     </td>
-                    <td className="grow whitespace-nowrap px-3 py-4 text-sm text-zinc-300">
+                    <td className="w-[45%] whitespace-nowrap px-3 py-4 text-sm text-zinc-300">
                       {plan.dateRange}
                     </td>
                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
@@ -119,43 +119,49 @@ export default function Planner() {
                   </tr>
                 ))}
                 <tr key="form" className="group h-[53.5px]">
-                  <td>
+                  <td className="py-4 pl-4 pr-3">
                     <Form {...form}>
                       <form
                         onSubmit={form.handleSubmit(onSubmit)}
                         className="space-y-8"
                       >
-                        <div className="flex items-center space-x-4">
-                          <FormField
-                            control={form.control}
-                            name="topic"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormControl>
-                                  <Input
-                                    placeholder="Topic"
-                                    {...field}
-                                    className="reset-input bg-white/10 transition-colors hover:bg-white hover:text-zinc-900"
+                        <div className="flex items-start gap-4">
+                          <div className="w-[45%]">
+                            <FormField
+                              control={form.control}
+                              name="topic"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormControl>
+                                    <Input
+                                      placeholder="Topic"
+                                      {...field}
+                                      className="reset-input bg-white/10 transition-colors hover:bg-white hover:text-zinc-900"
+                                    />
+                                  </FormControl>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                          <div className="w-[45%]">
+                            <FormField
+                              control={form.control}
+                              name="dateRange"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-col">
+                                  <CalendarRangePicker
+                                    value={field.value}
+                                    onChange={field.onChange}
                                   />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                          <FormField
-                            control={form.control}
-                            name="dateRange"
-                            render={({ field }) => (
-                              <FormItem className="flex flex-col">
-                                <CalendarRangePicker
-                                  value={field.value}
-                                  onChange={field.onChange}
-                                />
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                          <Button type="submit">Add topic</Button>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                          <Button type="submit" className="h-10">
+                            Add topic
+                          </Button>
                         </div>
                       </form>
                     </Form>
