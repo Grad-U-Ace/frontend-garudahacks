@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { fetchSubjects } from "./actions";
 import { SubjectCombobox } from "./SubjectCombobox";
+import MakeActivitiesButton from "./MakeActivitiesButton";
 
 export default async function Sidebar() {
   const subjects: Subject[] = await fetchSubjects();
@@ -13,11 +14,7 @@ export default async function Sidebar() {
         <h1 className="text-center text-4xl font-medium">Guruda</h1>
       </Link>
       <SubjectCombobox data={subjects} />
-      <Link href={"/activities"}>
-        <div className="bg-white/10 p-3 rounded-lg transition-colors hover:bg-white/20 backdrop-blur-3xl">
-          Make Activities
-        </div>
-      </Link>
+      <MakeActivitiesButton />
     </aside>
   );
 }
